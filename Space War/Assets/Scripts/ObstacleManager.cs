@@ -9,9 +9,11 @@ public class ObstacleManager : MonoBehaviour
     private float xRange = 50;
     private float startTime = 2;
     private float intervalTime = 3.0f;
+    private PlayerController playerControllerScript;
  
     void Start()
     {
+        playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
         InvokeRepeating("SpawnObstacles", startTime, intervalTime);
     }
 
@@ -21,7 +23,11 @@ public class ObstacleManager : MonoBehaviour
 
     void SpawnObstacles() 
     {
-        int obstacleIndex = Random.Range(0, obstacles.Length);
-        Instantiate(obstacles[obstacleIndex], new Vector3(xRange, 5, Random.Range(-zRange, zRange)), obstacles[obstacleIndex].transform.rotation);
+        if (!playerControllerScript.gameOver)
+        {
+            int obstacleIndex = Random.Range(0, obstacles.Length);
+            Instantiate(obstacles[obstacleIndex], new Vector3(xRange, 5, Random.Range(-zRange, zRange)), obstacles[obstacleIndex].transform.rotation);
+        }
+        
     }
 }

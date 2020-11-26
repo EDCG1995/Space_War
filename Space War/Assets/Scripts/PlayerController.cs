@@ -10,30 +10,45 @@ public class PlayerController : MonoBehaviour
     public float backRange = -170;
     public float forwardRange = -125;
     public float rotationSpeed = 5;
-    public float speed = 20;
-    public bool gameOver;
+    public float speed = 30;
+    private float shot = 0.5f;
+    private float nextShot = 0;
+    public bool gameOver = false;
     public GameObject weaponShot;
+    public int HP = 20;
+
     void Start()
     {
-        
+       
     }
 
   
     void Update()
     {
         RangeSetup();
-        
+
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = -Input.GetAxis("Vertical");
-        
-        transform.Translate(Vector3.right * verticalInput * Time.deltaTime * speed);
-        transform.Translate(Vector3.forward * horizontalInput * Time.deltaTime * speed);
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Instantiate(weaponShot, new Vector3(transform.position.x + 13, transform.position.y, transform.position.z), weaponShot.transform.rotation);
-        }
 
-        
+        //Game over when HP reaches 0, else: normal movement and actions.
+        if (HP <= 0)
+        {
+            HP = 0;
+            Debug.Log(HP);
+            gameOver = true;
+        }
+        else 
+        {
+            transform.Translate(Vector3.right * verticalInput * Time.deltaTime * speed);
+            transform.Translate(Vector3.forward * horizontalInput * Time.deltaTime * speed);
+            
+            //Weapon shot and cooldown.
+            if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextShot)
+            {
+                nextShot = Time.time + shot;
+                Instantiate(weaponShot, new Vector3(transform.position.x + 13, transform.position.y, transform.position.z), weaponShot.transform.rotation);
+            }
+        }
     }
 
     void RangeSetup() 
@@ -57,5 +72,23 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(forwardRange, transform.position.y, transform.position.z);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Shot2")) 
+        {
+            HP -= 4;
+            Debug.Log(HP);
+
+        }
+        if (other.gameObject.CompareTag("Obstacle")) 
+        {
+            HP -= 16;
+            Debug.Log(HP);
+            
+        }
+
+        
     }
 }

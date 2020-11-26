@@ -7,7 +7,7 @@ public class DestroyOutOfBounds : MonoBehaviour
     private float boundMinusX =-200;
     private float boundPlusX = 55;
     private float boundY;
-    private float boundZ;
+    private float boundZ = 70;
     private int obstacleCount;
     void Start()
     {
@@ -18,6 +18,10 @@ public class DestroyOutOfBounds : MonoBehaviour
     void Update()
     {
         if (transform.position.x < boundMinusX || transform.position.x > boundPlusX) 
+        {
+            Destroy(gameObject);
+        }
+        if (transform.position.z < -boundZ || transform.position.z > boundZ) 
         {
             Destroy(gameObject);
         }
