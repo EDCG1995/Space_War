@@ -16,10 +16,17 @@ public class PlayerController : MonoBehaviour
     public bool gameOver = false;
     public GameObject weaponShot;
     public int HP = 20;
+    public ParticleSystem shootParticle;
+    public ParticleSystem crashParticle;
+    public ParticleSystem shootedParticle;
+    private AudioSource playerAudio;
+    public AudioClip shootSound;
+    public AudioClip shootedSound;
+    public AudioClip crashSound;
 
     void Start()
     {
-       
+        playerAudio = GetComponent<AudioSource>();
     }
 
   
@@ -46,6 +53,8 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextShot)
             {
                 nextShot = Time.time + shot;
+                playerAudio.PlayOneShot(shootSound, 2.0f);
+                shootParticle.Play();
                 Instantiate(weaponShot, new Vector3(transform.position.x + 13, transform.position.y, transform.position.z), weaponShot.transform.rotation);
             }
         }
@@ -78,12 +87,16 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Shot2")) 
         {
+            playerAudio.PlayOneShot(shootedSound, 2.0f);
+            shootedParticle.Play();
             HP -= 4;
             Debug.Log(HP);
 
         }
         if (other.gameObject.CompareTag("Obstacle")) 
         {
+            playerAudio.PlayOneShot(crashSound, 4.0f);
+            crashParticle.Play();
             HP -= 16;
             Debug.Log(HP);
             
