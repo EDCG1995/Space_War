@@ -1,2 +1,2 @@
 # Space_War
- Top down game for Interactive Multimedia
+ right-left game for the Interactive Multimedia module TU Dublin.
